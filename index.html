@@ -60,6 +60,27 @@
             line-height: 1.2;
         }
 
+        .instruction-btn {
+            display: block;
+            margin: 0 auto 30px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            max-width: 280px;
+            width: 100%;
+        }
+
+        .instruction-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
         .subtitle {
             text-align: center;
             margin-bottom: 30px;
@@ -186,6 +207,95 @@
             transform: translateY(-2px);
         }
 
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            position: relative;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .modal-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #e0e0e0;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+            padding-right: 40px;
+        }
+
+        .modal-subtitle {
+            font-size: 1.3rem;
+            margin: 25px 0 15px;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .modal-text {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-weight: normal;
+        }
+
+        .modal-list {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .modal-list li {
+            margin-bottom: 10px;
+            font-weight: normal;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 70px 15px 30px;
@@ -194,6 +304,12 @@
             .title {
                 font-size: 1.8rem;
                 margin-bottom: 12px;
+            }
+            
+            .instruction-btn {
+                padding: 12px 24px;
+                font-size: 0.95rem;
+                margin-bottom: 25px;
             }
             
             .subtitle {
@@ -232,6 +348,18 @@
                 padding: 10px 16px;
                 font-size: 0.9rem;
             }
+            
+            .modal-content {
+                padding: 25px 20px;
+            }
+            
+            .modal-title {
+                font-size: 1.5rem;
+            }
+            
+            .modal-subtitle {
+                font-size: 1.2rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -241,6 +369,11 @@
             
             .title {
                 font-size: 1.6rem;
+            }
+            
+            .instruction-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
             }
             
             .subtitle {
@@ -273,6 +406,18 @@
             .footer-btn {
                 min-width: 100%;
             }
+            
+            .modal-content {
+                padding: 20px 15px;
+            }
+            
+            .modal-title {
+                font-size: 1.3rem;
+            }
+            
+            .modal-subtitle {
+                font-size: 1.1rem;
+            }
         }
     </style>
 </head>
@@ -281,7 +426,8 @@
 
     <div class="container">
         <h1 class="title">Special junk packet list</h1>
-        <p class="subtitle">Эта страница для заполнения полей special junk packet для AmneziaVPN wg 1.5</p>
+        <button class="instruction-btn" id="instructionBtn">Инструкция по настройке</button>
+        <p class="subtitle">Эта страница для заполнения полей special junk packet для amneziaVPN wg 1.5</p>
 
         <div class="image-container">
             <img src="SpecialJunkPacket.jpg" alt="Special Junk Packet">
@@ -320,7 +466,51 @@
         <div class="footer-buttons">
             <a href="https://amnezia.org/" target="_blank" class="footer-btn">Amnezia.org</a>
             <a href="https://amnezia.org/downloads" target="_blank" class="footer-btn">Скачать AmneziaVPN</a>
-            <a href="https://docs.amnezia.org/ru/documentation/instructions/new-amneziawg-selfhosted/" target="_blank" class="footer-btn">Документация по awg 1.5</a>
+            <a href="https://amnezia.org/" target="_blank" class="footer-btn">Документация по awg 1.5</a>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="instructionModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <h2 class="modal-title">Инструкция по настройке AmneziaWG 1.5</h2>
+            
+            <h3 class="modal-subtitle">WG 1.5</h3>
+            <p class="modal-text">Приложение AmneziaVPN поддерживает протокол WG 1.5, но по умолчанию он не включен, для его работы нужно провести небольшие настройки</p>
+            
+            <h3 class="modal-subtitle">Системные требования</h3>
+            <p class="modal-text">Для работы WG 1.5 требуется приложение AmneziaVPN версии 4.8.8.1 и выше</p>
+            <p class="modal-text">Проверить версию вашего приложения:</p>
+            <p class="modal-text">Перейдите в приложение → нажмите на значок шестеренки → нажмите "Об AmneziaVPN" → в самом низу будет строчка "Версия ПО: x.x.x.x".</p>
+            <p class="modal-text">(Для работы WG 1.5 ничего на сервере проверять не нужно)</p>
+            
+            <h3 class="modal-subtitle">Настройка</h3>
+            <ol class="modal-list">
+                <li>Перейдите в приложение → нажмите на значок шестеренки → нажмите на "Серверы" → нажмите на ваш сервер → нажмите на "AmneziaWG" → нажмите на "Настройки подключения AmneziaWG" → там будут поля с названиями "Special junk packet list" пронумерованные от 1 до 5.</li>
+                <li>На сайте где вы сейчас читаете этот текст, если выйти из инструкции по настройке AmneziaWG 1.5, будут поля с названиями I1 I2 I3 I4 I5, напротив каждого поля есть кнопка "Копировать" → скопируйте текст в поле I1 и вставьте его в приложении в поле "I1 - special junk packet"</li>
+                <li>Нажмите "Сохранить" → в уведомлении "Сохранить настройки" выберите "Продолжить" → нажмите на значок домика внизу экрана и пробуйте подключиться к VPN.</li>
+                <li>Если подключение не устанавливается, вернитесь на сайт → нажмите копировать в поле с I2 → вставьте скопированный текст в поле "I2 - special junk packet" в вашем приложении, как вы это уже делали в пункте 2, затем снова пробуйте подключиться.</li>
+                <li>Если всё ещё не удается подключиться, повторите пункт 4, заполнив поля I3, и продолжайте заполнять поля, пока не получится подключиться.</li>
+            </ol>
+            
+            <h3 class="modal-subtitle">Ответы на вопросы</h3>
+            <ol class="modal-list">
+                <li>"Если я заполнил поля "Special junk packet" на главном устройстве и затем поделился подключением, то на другом устройстве они будут заполнены?" - Нет, в AmneziaVPN отсутствует функционал, чтобы эти поля заполнялись, если поделиться подключением</li>
+                <li>"На другом устройстве, с которым я поделился подключением, в поля "Special junk packet" нужно вписать те же значения, что и на основном устройстве?" - Не обязательно, вы можете просто открыть этот сайт и взять значения с него, снова заполнив поля "Special junk packet"</li>
+                <li>"Что делать с AndroidTV и другими устройствами, где нельзя просто взять, скопировать и вставить?" - Для этого зайдите в приложение AmneziaVPN → нажмите на значок поделиться внизу экрана → задайте имя пользователя, сервер, выберите протокол "AmneziaWG" и обязательно формат подключения "Оригинальный формат AmneziaWG" → нажмите "Поделиться" → затем в уведомлении, которое открылось, снова выберите "Поделиться" и сохраните файл в удобное для вас место → найдите сохранённый файл и откройте его через блокнот или любой другой текстовый редактор → вы увидите строчки H1 H2 H3 H4, под этими строчками вам необходимо создать строчку "I1 =", после = сделайте пробел и откройте этот сайт → скопируйте I1 и вставьте его после = → у вас должна получиться такая запись: "I1 = 0xd9ea01000001000..." → сохраните изменения в файле → скиньте его на флешку или любым другим удобным способом отправьте на AndroidTV или ваше устройство → зайдите на устройстве, где хотите добавить сделанный конфиг, в приложение AmneziaVPN → нажмите на значок плюсика внизу экрана → нажмите на пункт "Файл с настройками подключения" → выберите ваш файл → подключайтесь к VPN</li>
+                <li>"Что это за значения, которые нужно скопировать и вставить в AmneziaVPN?" - Это UDP пакеты, чтобы DPI (система блокировок) распознавала ваше VPN подключение не как VPN, а как другой UDP трафик, например DNS или SIP трафик</li>
+            </ol>
+            
+            <h3 class="modal-subtitle">Послесловие</h3>
+            <ol class="modal-list">
+                <li>Данная инструкция актуальна на 29.10.2025</li>
+                <li>Это не гайд по настройке VPN, весь вышесказанный текст - просто опыт автора, которым он делится, это ни в коем случае не призыв к действию!</li>
+                <li>Все действия вы делаете на свой страх и риск, автор не несёт ответственности, если у вас что-то не заработает</li>
+                <li>Весь код этого сайта есть на GitHub и находится в открытом доступе, вы также можете ознакомиться со скриптом для генерации этих UDP пакетов на главной странице GitHub репозитория, где размещен этот сайт</li>
+                <li>Данная инструкция пишется из моего личного опыта использования self-hosted, так что если у вас что-то отличается, я об этом знать не могу :)</li>
+            </ol>
+            
+            <p class="modal-text">Буду очень рад, если вы нажмёте на кнопку "Мой сайт" справа сверху и посмотрите мои другие проекты и возможно почитаете блог</p>
         </div>
     </div>
 
@@ -344,6 +534,24 @@
                         }, 2000);
                     });
                 });
+            });
+
+            const instructionBtn = document.getElementById('instructionBtn');
+            const instructionModal = document.getElementById('instructionModal');
+            const modalClose = document.getElementById('modalClose');
+
+            instructionBtn.addEventListener('click', function() {
+                instructionModal.style.display = 'flex';
+            });
+
+            modalClose.addEventListener('click', function() {
+                instructionModal.style.display = 'none';
+            });
+
+            instructionModal.addEventListener('click', function(e) {
+                if (e.target === instructionModal) {
+                    instructionModal.style.display = 'none';
+                }
             });
         });
 
