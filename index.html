@@ -425,9 +425,9 @@
     <a href="https://voidwaifu.github.io/VoidWaifu/" target="_blank" class="site-btn">Мой сайт</a>
 
     <div class="container">
-        <h1 class="title"></h1>
+        <h1 class="title">Special Junk Packet List</h1>
         <button class="instruction-btn" id="instructionBtn">Инструкция по настройке AmneziaWG 1.5</button>
-        <p class="subtitle">Эта страница для заполнения полей special junk packet для amneziaVPN wg 1.5</p>
+        <p class="subtitle">Эта страница для заполнения полей special junk packet для amneziaVPN WG 1.5</p>
 
         <div class="image-container">
             <img src="SpecialJunkPacket.jpg" alt="Special Junk Packet">
@@ -503,7 +503,7 @@
             
             <h3 class="modal-subtitle">Послесловие</h3>
             <ol class="modal-list">
-                <li>Данная инструкция актуальна на 29.10.2025</li>
+                <li>Данная инструкция актуальна на 30.10.2025</li>
                 <li>Это не гайд по настройке VPN, весь вышесказанный текст - просто опыт автора, которым он делится, это ни в коем случае не призыв к действию!</li>
                 <li>Все действия вы делаете на свой страх и риск, автор не несёт ответственности, если у вас что-то не заработает</li>
                 <li>Весь код этого сайта есть на GitHub и находится в открытом доступе, вы также можете ознакомиться со скриптом для генерации этих UDP пакетов на главной странице GitHub репозитория, где размещен этот сайт</li>
@@ -515,8 +515,12 @@
     </div>
 
     <script>
+        let availableFiles = [1, 2, 3, 4, 5];
+        
         document.addEventListener('DOMContentLoaded', function() {
-            loadRandomValues();
+            detectAvailableFiles().then(() => {
+                loadRandomValues();
+            });
             
             document.getElementById('refreshBtn').addEventListener('click', loadRandomValues);
             
@@ -555,21 +559,44 @@
             });
         });
 
+        async function detectAvailableFiles() {
+            const checkPromises = availableFiles.map(index => {
+                return fetch(`I-list${index}.json`)
+                    .then(response => response.ok ? index : null)
+                    .catch(() => null);
+            });
+
+            const results = await Promise.all(checkPromises);
+            availableFiles = results.filter(index => index !== null);
+            
+            if (availableFiles.length === 0) {
+                console.error('Нет доступных JSON файлов');
+                return;
+            }
+        }
+
         async function loadRandomValues() {
-            const randomFileIndex = Math.floor(Math.random() * 5) + 1;
+            if (availableFiles.length === 0) {
+                await detectAvailableFiles();
+            }
+            
+            const randomFileIndex = availableFiles[Math.floor(Math.random() * availableFiles.length)];
             const fileName = `I-list${randomFileIndex}.json`;
             
             try {
                 const response = await fetch(fileName);
                 const data = await response.json();
                 
-                const shuffled = [...data].sort(() => 0.5 - Math.random());
-                const selectedItems = shuffled.slice(0, 5);
+                const packets = data.packets;
+                const cycles = data.cycles;
                 
-                for (let i = 0; i < 5; i++) {
-                    const inputField = document.getElementById(`i${i+1}`);
-                    if (selectedItems[i]) {
-                        const fullValue = selectedItems[i].I;
+                for (let i = 1; i <= 5; i++) {
+                    const inputField = document.getElementById(`i${i}`);
+                    const randomCycle = Math.floor(Math.random() * cycles) + 1;
+                    const packetKey = `I${i}_c${randomCycle}`;
+                    
+                    if (packets[packetKey]) {
+                        const fullValue = packets[packetKey];
                         const displayValue = fullValue.substring(0, 20) + '...';
                         
                         inputField.value = displayValue;
