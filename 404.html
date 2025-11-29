@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoidWaifu - Страница не найдена</title>
+    <link rel="icon" type="image/png" href="assets/icon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            max-width: 100%;
+        }
+
+        :root {
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --bg-accent: #2d2d2d;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent: #bb86fc;
+            --accent-hover: #9d65d0;
+            --border: #333333;
+            --shadow: rgba(0, 0, 0, 0.5);
+        }
+
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .glitch-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0;
+            animation: glitch-overlay 5s infinite;
+            mix-blend-mode: overlay;
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                rgba(0, 0, 0, 0.1) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.4;
+            animation: scanlines 0.3s linear infinite;
+        }
+
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9997;
+            opacity: 0.2;
+            animation: noise 0.1s infinite;
+        }
+
+        .flicker {
+            animation: flicker 8s infinite;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--accent-hover);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem 0;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
+
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            width: 100%;
+        }
+
+        .error-code {
+            font-size: 8rem;
+            font-weight: 900;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            position: relative;
+            text-shadow: 0 0 10px var(--accent);
+            animation: glitch 2s infinite;
+        }
+
+        .error-code::before,
+        .error-code::after {
+            content: "404";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .error-code::before {
+            animation: glitch-1 0.5s infinite;
+            color: #ff0080;
+            z-index: -1;
+        }
+
+        .error-code::after {
+            animation: glitch-2 0.5s infinite;
+            color: #00ffff;
+            z-index: -2;
+        }
+
+        .error-title {
+            font-size: 2rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .error-message {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+
+        .error-explanation {
+            background-color: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            position: relative;
+            z-index: 2;
+        }
+
+        .home-link {
+            display: inline-block;
+            background-color: var(--accent);
+            color: var(--bg-primary);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .home-link:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow);
+            color: var(--bg-primary);
+        }
+
+        .glitch-artifact {
+            position: absolute;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0;
+        }
+
+        .artifact-line {
+            height: 2px;
+            background: var(--accent);
+            animation: artifact-line 8s infinite;
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        .artifact-dot {
+            background: var(--accent);
+            border-radius: 50%;
+            animation: artifact-dot 6s infinite;
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        .artifact-text {
+            font-size: 18px;
+            color: var(--accent);
+            font-weight: bold;
+            animation: artifact-text 12s infinite;
+            text-shadow: 0 0 8px var(--accent);
+            font-family: 'Courier New', monospace;
+        }
+
+        @keyframes glitch {
+            0% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translate(-2px, 2px);
+            }
+            40% {
+                transform: translate(-2px, -2px);
+            }
+            60% {
+                transform: translate(2px, 2px);
+            }
+            80% {
+                transform: translate(2px, -2px);
+            }
+            100% {
+                transform: translate(0);
+            }
+        }
+
+        @keyframes glitch-1 {
+            0% {
+                transform: translate(0);
+                opacity: 0.3;
+            }
+            33% {
+                transform: translate(4px, 0);
+                opacity: 0.3;
+            }
+            66% {
+                transform: translate(-4px, 0);
+                opacity: 0.3;
+            }
+            100% {
+                transform: translate(0);
+                opacity: 0.3;
+            }
+        }
+
+        @keyframes glitch-2 {
+            0% {
+                transform: translate(0);
+                opacity: 0.3;
+            }
+            33% {
+                transform: translate(0, -4px);
+                opacity: 0.3;
+            }
+            66% {
+                transform: translate(0, 4px);
+                opacity: 0.3;
+            }
+            100% {
+                transform: translate(0);
+                opacity: 0.3;
+            }
+        }
+
+        @keyframes artifact-line {
+            0% { opacity: 0; transform: scaleX(0); }
+            5% { opacity: 0.9; transform: scaleX(1); }
+            25% { opacity: 0.9; transform: scaleX(1); }
+            30% { opacity: 0; transform: scaleX(0); }
+            100% { opacity: 0; }
+        }
+
+        @keyframes artifact-dot {
+            0% { opacity: 0; transform: scale(0); }
+            10% { opacity: 1; transform: scale(1); }
+            40% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0; transform: scale(0); }
+            100% { opacity: 0; }
+        }
+
+        @keyframes artifact-text {
+            0% { opacity: 0; transform: translateY(20px) rotate(0deg); }
+            10% { opacity: 0.9; transform: translateY(0) rotate(0deg); }
+            30% { opacity: 0.9; transform: translateY(0) rotate(0deg); }
+            40% { opacity: 0; transform: translateY(-20px) rotate(10deg); }
+            100% { opacity: 0; }
+        }
+
+        @keyframes glitch-overlay {
+            0%, 100% { opacity: 0; }
+            5%, 8% { opacity: 0.15; }
+            10%, 15% { opacity: 0; }
+            20%, 25% { opacity: 0.1; }
+            30% { opacity: 0; }
+            50%, 55% { opacity: 0.12; }
+            60% { opacity: 0; }
+            75%, 80% { opacity: 0.15; }
+            85% { opacity: 0; }
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(4px); }
+        }
+
+        @keyframes noise {
+            0% { transform: translate(0,0); }
+            10% { transform: translate(-1%,-1%); }
+            20% { transform: translate(-1%,1%); }
+            30% { transform: translate(1%,-1%); }
+            40% { transform: translate(1%,1%); }
+            50% { transform: translate(-1%,-1%); }
+            60% { transform: translate(-1%,1%); }
+            70% { transform: translate(1%,-1%); }
+            80% { transform: translate(1%,1%); }
+            90% { transform: translate(-1%,-1%); }
+            100% { transform: translate(0,0); }
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            1% { opacity: 0.8; }
+            2% { opacity: 1; }
+            5% { opacity: 0.9; }
+            6% { opacity: 1; }
+            50% { opacity: 0.95; }
+            51% { opacity: 1; }
+            75% { opacity: 0.85; }
+            76% { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 100%;
+                padding: 0 10px;
+            }
+
+            main {
+                padding: 1.5rem 0;
+            }
+
+            .error-code {
+                font-size: 5rem;
+            }
+            
+            .error-title {
+                font-size: 1.5rem;
+            }
+            
+            .error-message {
+                font-size: 1rem;
+            }
+
+            .error-explanation {
+                padding: 1.2rem;
+                margin: 0 auto 1.5rem;
+            }
+
+            .home-link {
+                padding: 0.8rem 1.5rem;
+            }
+
+            .artifact-text {
+                font-size: 14px;
+            }
+
+            .artifact-line {
+                height: 1px;
+            }
+
+            .artifact-dot {
+                width: 6px !important;
+                height: 6px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            main {
+                padding: 1rem 0;
+            }
+
+            .error-code {
+                font-size: 4rem;
+            }
+            
+            .error-title {
+                font-size: 1.3rem;
+            }
+            
+            .error-message {
+                font-size: 0.9rem;
+            }
+
+            .error-explanation {
+                padding: 1rem;
+                margin: 0 auto 1.2rem;
+            }
+
+            .home-link {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="flicker">
+    <div class="glitch-overlay" style="background: linear-gradient(45deg, var(--accent) 0%, transparent 50%);"></div>
+    <div class="scanlines"></div>
+    <div class="noise"></div>
+
+    <main>
+        <div class="container">
+            <div class="error-container">
+                <h1 class="error-code">404</h1>
+                <h2 class="error-title">Потеряно в пустоте</h2>
+                
+                <p class="error-message">
+                    Возможно, вы искали нечто важное... Мне искренне жаль, что это невозможно найти сейчас. 
+                    Но в этом цифровом пространстве есть множество других интересных вещей, которые могут вас увлечь.
+                </p>
+                
+                <div class="error-explanation">
+                    Это страница 404. Ссылка, по которой вы перешли, либо была удалена, 
+                    либо никогда не существовала в этой реальности.
+                </div>
+                
+                <a href="https://voidwaifu.github.io/VoidWaifu/" class="home-link">
+                    Вернуться в безопасную гавань
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const errorCode = document.querySelector('.error-code');
+        if (errorCode) {
+            errorCode.addEventListener('mouseover', function() {
+                this.style.animation = 'glitch 0.3s infinite';
+            });
+            
+            errorCode.addEventListener('mouseout', function() {
+                this.style.animation = 'glitch 2s infinite';
+            });
+        }
+
+        function isInTextArea(x, y) {
+            const container = document.querySelector('.error-container');
+            const rect = container.getBoundingClientRect();
+            
+            let padding;
+            if (window.innerWidth < 768) {
+                padding = 15;
+            } else {
+                padding = 10;
+            }
+            
+            return (
+                x >= rect.left - padding &&
+                x <= rect.right + padding &&
+                y >= rect.top - padding &&
+                y <= rect.bottom + padding
+            );
+        }
+
+        function isInExplanationArea(x, y) {
+            const explanation = document.querySelector('.error-explanation');
+            if (!explanation) return false;
+            
+            const rect = explanation.getBoundingClientRect();
+            
+            let padding;
+            if (window.innerWidth < 768) {
+                padding = 25;
+            } else {
+                padding = 15;
+            }
+            
+            return (
+                x >= rect.left - padding &&
+                x <= rect.right + padding &&
+                y >= rect.top - padding &&
+                y <= rect.bottom + padding
+            );
+        }
+
+        function createRandomArtifact() {
+            const types = ['text', 'text', 'text', 'line', 'text', 'dot', 'text', 'line', 'text'];
+            const type = types[Math.floor(Math.random() * types.length)];
+            const artifact = document.createElement('div');
+            artifact.className = `glitch-artifact artifact-${type}`;
+            
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            
+            let x, y;
+            let attempts = 0;
+            const maxAttempts = 20;
+            
+            do {
+                if (Math.random() < 0.7) {
+                    const radius = window.innerWidth < 768 ? 
+                        Math.random() * 200 + 100 :
+                        Math.random() * 300;
+                    const angle = Math.random() * 2 * Math.PI;
+                    x = centerX + radius * Math.cos(angle);
+                    y = centerY + radius * Math.sin(angle);
+                } else {
+                    x = Math.random() * window.innerWidth;
+                    y = Math.random() * window.innerHeight;
+                }
+                attempts++;
+            } while ((isInTextArea(x, y) || isInExplanationArea(x, y)) && attempts < maxAttempts);
+            
+            if (attempts >= maxAttempts && (isInTextArea(x, y) || isInExplanationArea(x, y))) {
+                x = Math.random() * window.innerWidth;
+                y = Math.random() * window.innerHeight;
+                
+                if (isInTextArea(x, y) || isInExplanationArea(x, y)) {
+                    if (x < centerX) {
+                        x = Math.random() * (centerX - 100);
+                    } else {
+                        x = centerX + 100 + Math.random() * (window.innerWidth - centerX - 100);
+                    }
+                    
+                    if (y < centerY) {
+                        y = Math.random() * (centerY - 100);
+                    } else {
+                        y = centerY + 100 + Math.random() * (window.innerHeight - centerY - 100);
+                    }
+                }
+            }
+            
+            artifact.style.left = `${x}px`;
+            artifact.style.top = `${y}px`;
+            
+            artifact.style.animationDelay = `${Math.random() * 3}s`;
+            
+            switch(type) {
+                case 'line':
+                    const lineLength = window.innerWidth < 768 ? 
+                        Math.random() * 150 + 50 :
+                        Math.random() * 300 + 100;
+                    artifact.style.width = `${lineLength}px`;
+                    artifact.style.height = '2px';
+                    break;
+                case 'dot':
+                    const dotSize = window.innerWidth < 768 ? 
+                        Math.random() * 8 + 4 :
+                        Math.random() * 15 + 8;
+                    artifact.style.width = `${dotSize}px`;
+                    artifact.style.height = `${dotSize}px`;
+                    break;
+                case 'text':
+                    const texts = ['ERROR', '404', 'NULL', 'VOID', 'GLITCH', 'CORRUPT', 'FAIL', 'LOST', 'BROKEN', 'CRASH', 'SYSTEM FAILURE'];
+                    artifact.textContent = texts[Math.floor(Math.random() * texts.length)];
+                    artifact.style.fontSize = window.innerWidth < 768 ? 
+                        `${Math.random() * 12 + 10}px` :
+                        `${Math.random() * 20 + 16}px`;
+                    break;
+            }
+            
+            document.body.appendChild(artifact);
+            
+            setTimeout(() => {
+                if (artifact.parentNode) {
+                    artifact.parentNode.removeChild(artifact);
+                }
+            }, 15000);
+        }
+
+        function scheduleArtifact() {
+            let count, minInterval, maxInterval;
+            if (window.innerWidth < 768) {
+                count = Math.floor(Math.random() * 2) + 1;
+                minInterval = 300;
+                maxInterval = 800;
+            } else {
+                count = Math.floor(Math.random() * 2) + 1;
+                minInterval = 200;
+                maxInterval = 600;
+            }
+            
+            for (let i = 0; i < count; i++) {
+                setTimeout(createRandomArtifact, Math.random() * 500);
+            }
+            
+            setTimeout(scheduleArtifact, Math.random() * (maxInterval - minInterval) + minInterval);
+        }
+        
+        scheduleArtifact();
+
+        setInterval(() => {
+            const elements = document.querySelectorAll('.error-code, .error-title, .error-message, .error-explanation, .home-link');
+            elements.forEach(el => {
+                if (Math.random() > 0.5) {
+                    el.style.opacity = Math.random() * 0.5 + 0.5;
+                    setTimeout(() => {
+                        el.style.opacity = 1;
+                    }, 100);
+                }
+            });
+        }, 2000);
+
+        setInterval(() => {
+            if (Math.random() > 0.6) {
+                document.body.style.transform = `translate(${Math.random() * 6 - 3}px, ${Math.random() * 6 - 3}px)`;
+                setTimeout(() => {
+                    document.body.style.transform = 'translate(0, 0)';
+                }, 100);
+            }
+        }, 1500);
+
+        setInterval(() => {
+            if (Math.random() > 0.8) {
+                const hue = Math.random() * 360;
+                document.body.style.backgroundColor = `hsl(${hue}, 10%, 8%)`;
+                setTimeout(() => {
+                    document.body.style.backgroundColor = '';
+                }, 200);
+            }
+        }, 3000);
+    </script>
+</body>
+</html>
