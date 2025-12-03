@@ -262,7 +262,7 @@ Content-Length: 0
                     
                     if result and successful_services:
                         with self.lock:
-                            packet_hex = f"<b 0x{packet_data.hex()}><r 16><c><t><r 32>"
+                            packet_hex = f"<b 0x{packet_data.hex()}>"
                             self.working_packets[protocol_name] = packet_hex
                             self.success_count += 1
                     else:
